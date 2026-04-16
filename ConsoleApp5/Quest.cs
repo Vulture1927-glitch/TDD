@@ -1,8 +1,10 @@
-﻿namespace QuestProgressTracker
+﻿using QuestProgressTracker;
+namespace QuestProgressTracker
 {
     public class Quest
     {
         private string v;
+        List<Objective> AcceptedQuests = new List<Objective>();
 
         public Quest(string v)
         {
@@ -11,19 +13,45 @@
 
         public bool IsCompleted { get; set; }
 
-        public void AddObjective(string v1, int v2)
+        public void AddObjective(string name, int required)
         {
-            throw new NotImplementedException();
+            Objective obj = new Objective();
+            obj.Name = name;
+            obj.RequiredAmount = required;
+            AcceptedQuests.Add(obj);
         }
 
-        public Objective GetObjective(string v)
+        public Objective GetObjective(Objective v)
         {
-            throw new NotImplementedException();
+           if(AcceptedQuests.Contains(v))
+            {
+                return v;
+            }
+            throw new ArgumentException("No quest with that name");
         }
 
         public void ProgressObjective(string v1, int v2)
         {
-            throw new NotImplementedException();
+            if (AcceptedQuests.Count > 0)
+            {
+                foreach (Objective obj in AcceptedQuests)
+                {
+                    if (obj.Name == v1)
+                    {
+                        obj.AddAmount(v2);
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("No quest with that name");
+                    }
+                }
+            }
+            else
+            {
+                IsCompleted = true;
+                Console.WriteLine("Quest complete");
+            }
         }
     }
 }
